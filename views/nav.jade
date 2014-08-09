@@ -1,0 +1,22 @@
+div.container
+	nav.navbar.navbar-default
+		div.collapse.navbar-collapse
+			ul.nav.navbar-nav
+				if page == "article"
+					li.active
+						a(href="/index.html") Article
+				else
+					li
+						a(href="/index.html") Article
+				if page == "resume"
+					li.active
+						a(href="/resume.html") Resume
+				else
+					li
+						a(href="/resume.html") Resume
+				if page == "how"
+					li.active
+						a(href="#") How
+				else
+					li
+						a(href="#") How
