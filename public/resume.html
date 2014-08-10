@@ -1,19 +1,172 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>My Resume</title>
-<link rel="stylesheet" type="text/css" href="/stylesheets/Normalize.css">
-</head>
+	<head>
+		<title>My Resume</title>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css">
+		<style type="text/css">
+			.skill {
+				margin-top: 20px;
+			}
+			.skill-block {
+				border-radius: 3px;
+				color: #FFFFFF;
+				padding: 5px 10px;
+				margin: 5px 5px;
+			}
+			.skill-block-first {
+				background-color: #2557A7;
+				border-color: #2557A7;
+			}
+			.skill-block-second {
+				background-color: #407BD3;
+				border-color: #407BD3;
+			}
+			.skill-block-third {
+				background-color: #7EA6E1;
+				border-color: #7EA6E1;
+			}
+			section {
+				margin: 5px auto;
+			}
+			.category {
+				font-size: 30px;
+				color: #003C9D;
+			}
+			.company {
+				font-weight: bold;
+				font-size: large;
+			}
+			.product {
+				font-weight: bold;
+				color: #444444;
+				margin-right: 5px;
+			}
+			.role {
+				font-weight: bold;
+				color: #003C9D;
+				margin-right: 5px;
+			}
+			.time {
+				font-size: small;
+				color: #AAAAAA;
+			}
+			.detail {
+				margin-top: 5px;
+			}
+		</style>
+	</head>
 
-<body>
-	<header>zcx</header>
-	<section>
-		<h1>工作经历</h1>
-	</section>
-	<section>
-		<h1>教育经历</h1>
-	</section>
-	<footer></footer>
-</body>
+	<body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-2">
+						<div>
+							<h2>张春晓</h2>
+							<div>
+								Tel: 13810866405
+							</div>
+							<div>
+								E-mail: zcx8532@gmail.com
+							</div>
+							<div>
+								Birth: 1985.03.02
+							</div>
+							<div>
+								硕士学位，毕业于2010年
+							</div>
+						</div>
+					</div>
+					<div class="col-md-10">
+						<div class="skill">
+							<div class="pull-left skill-block skill-block-first">
+								JavaScript
+							</div>
+							<div class="pull-left skill-block skill-block-first">
+								Dojo
+							</div>
+							<div class="pull-left skill-block skill-block-first">
+								Java
+							</div>
+							<div class="pull-left skill-block skill-block-first">
+								Cloud
+							</div>
+							<div class="pull-left skill-block skill-block-first">
+								HTML
+							</div>
+							<div class="pull-left skill-block skill-block-second">
+								CSS
+							</div>
+							<div class="pull-left skill-block skill-block-second">
+								Linux
+							</div>
+							<div class="pull-left skill-block skill-block-second">
+								Python
+							</div>
+							<div class="pull-left skill-block skill-block-second">
+								WebSphere
+							</div>
+							<div class="pull-left skill-block skill-block-second">
+								NodeJS
+							</div>
+							<div class="pull-left skill-block skill-block-third">
+								Groovy
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<section class="container">
+			<div class="row">
+				<div class="col-md-2">
+					<div class="category">
+						工作经历
+					</div>
+				</div>
+				<div class="col-md-10">
+					<div>
+						<div class="company">
+							IBM(2010.05 - )
+						</div>
+						<div>
+							<span class="product">PureApplication System</span>
+							<span class="role">Developer</span>
+							<span class="time">2013.01 - now</span>
+							<div class="detail">
+								PureApp 是一个专家集成系统，它对软硬件进行了优化，可以帮助企业快速搭建云平台，管理企业各个应用系统的整个生命周期，从而降低运维成本，提高IT生产效率。
+								<ul>
+									<li>负责产品的前端开发 (2013.7 - 今)</li>
+									<ul>
+										<li>设计并完成模块的公用REST API；并提供CLI支持。</li>
+										<li>利用Dojo开发自定义的widget，跟后端的REST服务集成。</li>
+										<li>重构产品CSS结构，为自动化构建添加CSS Sprite支持。</li>
+									</ul>
+									<li>负责产品 Data-at-rest加密功能的开发. (2013.2 -2013.6)</li>
+										<span>Data-at-rest 加密功能对于政府及诸如银行等对数据安全要求很高的行业非常重要，PureApp 支持在AIX, Linux, Windows 平台上的Data-at-rest加密功能。</span>
+									<li>领导UNICA pattern的开发，涉及UNICA产品族5个产品</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="container">
+			<div class="row">
+				<div class="col-md-2">
+					<div class="category">
+						教育经历
+					</div>
+				</div>
+				<div class="col-md-10">
+					<div>
+						aa
+					</div>
+				</div>
+			</div>
+		</section>
+		<footer></footer>
+	</body>
 
 </html>
