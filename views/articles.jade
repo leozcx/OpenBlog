@@ -1,0 +1,11 @@
+extends layout
+
+block content
+	include nav.jade
+	mixin abstract(article)
+		include abstract.jade
+	section
+		each article in articles
+			+abstract(article)
+			br
+			

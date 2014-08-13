@@ -1,22 +1,15 @@
-div.container
+header
 	nav.navbar.navbar-default
 		div.collapse.navbar-collapse
 			ul.nav.navbar-nav
-				if page == "article"
-					li.active
-						a(href="/index.html") Article
-				else
-					li
-						a(href="/index.html") Article
-				if page == "resume"
-					li.active
-						a(href="/resume.html") Resume
-				else
-					li
-						a(href="/resume.html") Resume
-				if page == "how"
-					li.active
-						a(href="#") How
-				else
-					li
-						a(href="#") How
+				mixin navItem(active, text, href)
+					- if(active) {
+						li.active
+							a(href="#{href}")= text
+					- } else {
+						li
+							a(href="#{href}")= text
+					- }
+				+navItem((page == "article"), "Article", "/")
+				+navItem((page == "resume"), "Resume", "/resume")
+				+navItem((page == "how"), "How", "#")
