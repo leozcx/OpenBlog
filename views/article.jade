@@ -1,0 +1,8 @@
+extends layout
+
+block content
+	include nav.jade
+	section
+		h2= article.title
+		div
+		| !{article.content}
