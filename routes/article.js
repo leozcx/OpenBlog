@@ -3,7 +3,7 @@ var router = express.Router();
 var fs = require('fs'), path = require('path'), util = require('../util'), md = require('markdown').markdown;
 
 router.get('/:id', function(req, res) {
-	var fileName = req.params.id + ".md";
+	var fileName = req.params.id;
 	var name = path.join(util.articlePath, fileName);
 	fs.exists(name, function(exists) {
 		if(exists) {
@@ -13,10 +13,8 @@ router.get('/:id', function(req, res) {
 				}
 				var html = md.toHTML(data);
 				util.loadIndex().then(function(index) {
-					
 					var meta = index[req.params.id];
-					console.log(meta)
-					res.render('article', { article: {title: meta.title, content: html} });
+					res.render('article', { article: {title: meta.title, content: data} });
 				}, function(err) {
 					console.log(err);
 				});
@@ -24,6 +22,20 @@ router.get('/:id', function(req, res) {
 		} else {
 			console.log('Dosenot exist');
 		}
+	});
+});
+
+router.post('/', function(req, res) {
+	var data = req.body;
+	data.id = util.generateId();
+	util.save(data).then(function(ret) {
+		res.json(ret);
+	});
+});
+
+router.delete('/:id', function(req, res) {
+	util.delete(req.params.id).then(function(ret) {
+		res.json(ret);
 	});
 });
 	

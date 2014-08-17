@@ -2,10 +2,52 @@ extends layout
 
 block content
 	include nav.jade
-	mixin abstract(article)
-		include abstract.jade
+	include abstract.jade
 	section
+		- var params = {"id": "deleteArticleConfirm"};
 		each article in articles
-			+abstract(article)
-			br
-			
+			+abstract(article, params)
+		+deleteArticleConfirmDialog(params)
+		form.form-horizontal.hide#articleForm(role="form")
+			div.form-group
+				label.col-sm-1.control-label(for="inputTitle") Title
+				div.col-sm-8
+					input.form-control#inputTitle(type="text", placeholder="Title")
+				div.col-sm-3
+					button.btn.btn-primary#saveArticleButton(type="button") Save
+					- var params = {"id": "discardConfirm"};
+					button.btn.btn-link#discardAritcleButton(type="button", data-toggle="modal", data-target="##{params.id}") Discard
+					include confirm-dialog.jade
+			textarea#article-textarea.hide
+			- if(admin)
+						script.
+							var articleForm = $('#articleForm');
+							var articleTextarea = $('#article-textarea');
+							$("#newArticleButton").click((function() {
+								articleForm.removeClass('hide');
+								console.log(articleTextarea);
+								articleTextarea.summernote({
+									height: 200
+								});
+							}));
+							$('#saveArticleButton').click(function() {
+								articleForm.addClass('hide');
+								var sHTML = articleTextarea.code();
+								var title = $('#inputTitle').val();
+								var data = {};
+								data.title = title;
+								data.content = sHTML;
+								$.ajax({
+									url: "/a",
+									type: "POST",
+									context: document.body,
+									data: data
+									}).done(function(resp) {
+										console.log(resp);
+										articleTextarea.destroy();
+									});
+							});
+							$('##{params.id}ConfirmButton').click(function() {
+								articleForm.addClass('hide');
+								articleTextarea.destroy();
+							});

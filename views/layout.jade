@@ -2,6 +2,12 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap.css', type='text/css', media='all')
+    link(rel='stylesheet', href='/stylesheets/style.css', type='text/css', media='all')
+    link(rel='stylesheet', href='/stylesheets/summernote.css', type='text/css', media='all')
+    link(rel='stylesheet', href='/stylesheets/font-awesome.css', type='text/css', media='all')
+    script(type='text/javascript', src='/javascripts/jquery-source/jquery-1.11.1.js')
+    script(type='text/javascript', src='/javascripts/jquery-source/bootstrap.js')
+    script(type='text/javascript', src='/javascripts/jquery-source/summernote.js')
   body.container
     block content

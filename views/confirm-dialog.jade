@@ -1,0 +1,15 @@
+
+.modal.fade(id="#{params.id}", tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type="button" data-dismiss="modal")
+					span(aria-hidden="true") &times;
+					span.sr-only Close
+				h4.modal-title Confirm
+			.modal-body
+				p Confirm to discard?
+			.modal-footer
+				button.btn.btn-primary(type="button" id="#{params.id}ConfirmButton" data-dismiss="modal") Confirm
+				button.btn.btn-default(type="button" id="#{params.id}CancelButton" data-dismiss="modal") Cancel
+					
