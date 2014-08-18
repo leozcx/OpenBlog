@@ -151,7 +151,7 @@ function getAbstract(content) {
 	return content;
 }
 
-function delete(id) {
+function deleteArticle(id) {
 	
 }
 
@@ -177,4 +177,4 @@ exports.articleUrl = articleUrl;
 exports.articlePath = articlePath;
 exports.generateId = generateId;
 exports.save = save;
-exports.delete = delete;
+exports.deleteArticle = deleteArticle;

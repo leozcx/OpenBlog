@@ -1,0 +1,16 @@
+{
+	"create": "New",
+	"confirm": "Confirm",
+	"cancel": "Cancel",
+	"confirm_discard": "Confirm to discard?",
+	"confirm_delete": "Confirm to delete?",
+	"discard": "Discard",
+	"logout": "Logout",
+	"login": "Login",
+	"article" : {
+		"full": "Full article",
+		"delete": "Delete"
+	},
+	"save": "Save",
+	"title": "Title"
+}

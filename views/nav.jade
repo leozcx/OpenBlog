@@ -17,9 +17,9 @@ header
 				- if(admin)
 					ul.nav.navbar-nav.navbar-right
 						li
-							a(href="#")= "Logout"
-					button#newArticleButton.btn.btn-default.navbar-btn.navbar-right(type="button")= "New"
+							a(href="#")= t('login')
+					button#newArticleButton.btn.btn-default.navbar-btn.navbar-right(type="button")= t('create')
 				- else
 					ul.nav.navbar-nav.navbar-right
 						li
-							a(href="#")= "Login"
+							a(href="#")= t('logout')

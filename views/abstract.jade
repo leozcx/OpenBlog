@@ -5,9 +5,9 @@ mixin abstract(article, params)
 			div
 				| !{article.abstract}
 				div
-					a.btn.btn-link(href=article.url) More
+					a.btn.btn-link(href=article.url)= t('article.full')
 					- if(admin)
-						button.btn.btn-link.pull-right(data-toggle="modal", id="#{article.id}DeleteButton") Delete
+						button.btn.btn-link.pull-right(data-toggle="modal", id="#{article.id}DeleteButton")= t('article.delete')
 						script.
 							$('##{article.id}DeleteButton').click(function() {
 								$("##{params.id}").modal();

@@ -6,10 +6,10 @@
 				button.close(type="button" data-dismiss="modal")
 					span(aria-hidden="true") &times;
 					span.sr-only Close
-				h4.modal-title Confirm
+				h4.modal-title= t('confirm')
 			.modal-body
-				p Confirm to discard?
+				p #{params.text}
 			.modal-footer
-				button.btn.btn-primary(type="button" id="#{params.id}ConfirmButton" data-dismiss="modal") Confirm
-				button.btn.btn-default(type="button" id="#{params.id}CancelButton" data-dismiss="modal") Cancel
+				button.btn.btn-primary(type="button" id="#{params.id}ConfirmButton" data-dismiss="modal")= t('confirm')
+				button.btn.btn-default(type="button" id="#{params.id}CancelButton" data-dismiss="modal")= t('cancel')
 					
