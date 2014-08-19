@@ -19,6 +19,16 @@ block content
 					- var params = {"id": "discardConfirm", "text": t('confirm_discard')};
 					button.btn.btn-link#discardAritcleButton(type="button", data-toggle="modal", data-target="##{params.id}")= t('discard')
 					include confirm-dialog.jade
+			div.form-group
+				label.col-sm-1.control-label(for="inputTag")= t('tag')
+				div.col-sm-8
+					input.form-control#inputTag(type="text", placeholder=t('tag_hint'))
+			div.form-group
+				label.col-sm-1.control-label(for="inputContent")= t('content')
+				div.col-sm-8
+					span.help-block= t('content_hint_upload')
+					input#inputContent(type='file')
+					span.help-block= t('content_hint_type')
 			textarea#article-textarea.hide
 			- if(admin)
 						script.
@@ -35,8 +45,10 @@ block content
 								articleForm.addClass('hide');
 								var sHTML = articleTextarea.code();
 								var title = $('#inputTitle').val();
+								var tag = $('#inputTag').val();
 								var data = {};
 								data.title = title;
+								data.tag = tag;
 								data.content = sHTML;
 								$.ajax({
 									url: "/a",

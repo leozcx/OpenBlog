@@ -34,8 +34,8 @@ router.post('/', function(req, res) {
 });
 
 router.delete('/:id', function(req, res) {
-	util.delete(req.params.id).then(function(ret) {
-		res.json(ret);
+	util.deleteArticle(req.params.id).then(function(ret) {
+		res.json({"id": ret});
 	});
 });
 	

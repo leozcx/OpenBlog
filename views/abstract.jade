@@ -21,7 +21,7 @@ mixin deleteArticleConfirmDialog(params)
 			var articleId = $("##{params.id}").attr("articleId");
 			var articlePanelId = articleId + "panel";
 			$.ajax({
-				url: "/a/" + articlePanelId,
+				url: "/a/" + articleId,
 				type: "DELETE",
 				context: document.body
 			}).done(function(resp) {

@@ -2,6 +2,7 @@
 var fs = require('fs');
 var path = require('path');
 var Promise = require('promise');
+var async = require('async');
 
 var metaFile = path.join(__dirname, 'doc', 'metadata.json');
 var indexFile = path.join(__dirname, 'doc', 'index.json');
@@ -80,11 +81,14 @@ function loadIndex() {
 	return promise;
 }
 
-function updateIndex(metadata) {
-	console.log("updateIndex");
+function addIndex(metadata) {
 	index[metadata.id] = {
 		'title': metadata.title
 	};
+	return saveIndex(metadata);
+}
+
+function saveIndex(metadata) {
 	var promise = new Promise(function(resolve, reject) {
 		fs.writeFile(indexFile, JSON.stringify(index), {encoding: 'utf8'}, function(err) {
 			if(err) {
@@ -105,15 +109,14 @@ function generateId() {
 }
 
 function save(article) {
-	return saveContent(article).then(saveMetadata, function(err){
+	return saveContent(article).then(addMetadata, function(err){
 		console.log(err);
-	}).then(updateIndex, function(err) {
+	}).then(addIndex, function(err) {
 		console.log(err);
 	});
 }
 
 function saveContent(article) {
-	console.log("saveContent");
 	var promise = new Promise(function(resolve, reject) {
 		var file = path.join(articlePath, article.id);
 		fs.writeFile(file, article.content, {encoding: 'utf8'}, function (err) {
@@ -122,7 +125,7 @@ function saveContent(article) {
 				"id" : article.id,
 				"title" : article.title,
 				"abstract" : getAbstract(article.content),
-				"tag" : article.tag || []
+				"tag" : (article.tag && article.tag.split(',')) || []
 			};
 
 		  resolve(metadata);
@@ -131,9 +134,12 @@ function saveContent(article) {
 	return promise;
 }
 
-function saveMetadata(metadata) {
-	console.log("updateMetadata");
+function addMetadata(metadata) {
 	jsonMeta.push(metadata);
+	return saveMetadata(metadata);
+}
+
+function saveMetadata(metadata) {
 	var promise = new Promise(function(resolve, reject) {
 		fs.writeFile(metaFile, JSON.stringify(jsonMeta), {encoding: 'utf8'}, function(err) {
 			if(err) 
@@ -152,7 +158,7 @@ function getAbstract(content) {
 }
 
 function deleteArticle(id) {
-	
+	return deleteMetadata(id).then(deleteContent).then(deleteIndex);
 }
 
 function deleteContent(id) {
@@ -160,14 +166,31 @@ function deleteContent(id) {
 		var file = path.join(articlePath, id);
 		fs.unlink(file, function (err) {
 		  if (err) reject(err);
-		  resolve({"id": id});
+		  resolve(id);
 		});
 	});
 	return promise;
 }
 
 function deleteMetadata(id) {
-	
+	var promise = new Promise(function(resolve, reject) {
+		var len = jsonMeta.length;
+		for(var i = 0; i < len; i++) {
+			var item = jsonMeta[i];
+			if(item.id == id) {
+				jsonMeta.splice(i, 1);
+				saveMetadata(id).then(resolve);
+				break;
+			}
+		}
+		resolve(id);
+	});
+	return promise;
+}
+
+function deleteIndex(id) {
+	delete index[id];
+	return saveIndex(id);
 }
 
 exports.init = init;
