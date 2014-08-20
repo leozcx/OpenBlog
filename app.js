@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var i18n = require('i18next');
+var multer = require('multer');
 
 var routes = require('./routes/index');
 var resume = require('./routes/resume');
@@ -24,6 +25,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(multer({ dest: util.articlePath,
+	rename: function (fieldname, filename) {
+	    return util.generateId();
+	  }}));
 
 app.use(i18n.handle);
 i18n.registerAppHelper(app)

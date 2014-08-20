@@ -9,7 +9,7 @@ block content
 		each article in articles
 			+abstract(article, params)
 		+deleteArticleConfirmDialog(params)
-		form.form-horizontal.hide#articleForm(role="form")
+		form.form-horizontal.hide#articleForm(role="form", enctype='multipart/form-data')
 			div.form-group
 				label.col-sm-1.control-label(for="inputTitle")= t('title')
 				div.col-sm-8
@@ -43,18 +43,25 @@ block content
 							}));
 							$('#saveArticleButton').click(function() {
 								articleForm.addClass('hide');
-								var sHTML = articleTextarea.code();
 								var title = $('#inputTitle').val();
 								var tag = $('#inputTag').val();
-								var data = {};
-								data.title = title;
-								data.tag = tag;
-								data.content = sHTML;
+								var data = new FormData();
+								data.append('title', title);
+								data.append('tag', tag);
+								var files = $('#inputContent')[0].files;
+								if(files) {
+									data.append('file', files[0]);
+								} else {
+									var sHTML = articleTextarea.code();
+									data.append('content', sHTML);
+								}
 								$.ajax({
 									url: "/a",
 									type: "POST",
 									context: document.body,
-									data: data
+									data: data,
+									contentType:false,
+									processData:false
 									}).done(function(resp) {
 										console.log(resp);
 										articleTextarea.destroy();

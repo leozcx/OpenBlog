@@ -10,6 +10,7 @@ mixin abstract(article, params)
 						button.btn.btn-link.pull-right(data-toggle="modal", id="#{article.id}DeleteButton")= t('article.delete')
 						script.
 							$('##{article.id}DeleteButton').click(function() {
+								console.log("delted");
 								$("##{params.id}").modal();
 								$("##{params.id}").attr("articleId", "#{article.id}");
 							});

@@ -108,28 +108,46 @@ function generateId() {
 	return date.getTime().toString();;
 }
 
-function save(article) {
-	return saveContent(article).then(addMetadata, function(err){
+function save(article, upload) {
+	return saveContent(article, upload).then(addMetadata, function(err){
 		console.log(err);
 	}).then(addIndex, function(err) {
 		console.log(err);
 	});
 }
 
-function saveContent(article) {
+function saveContent(article, upload) {
 	var promise = new Promise(function(resolve, reject) {
+		//if is upload, file is saved directly, but we need get abstract
 		var file = path.join(articlePath, article.id);
-		fs.writeFile(file, article.content, {encoding: 'utf8'}, function (err) {
-		  if (err) reject(err);
-			var metadata = {
-				"id" : article.id,
-				"title" : article.title,
-				"abstract" : getAbstract(article.content),
-				"tag" : (article.tag && article.tag.split(',')) || []
-			};
-
-		  resolve(metadata);
-		});
+		if(upload) {
+			fs.readFile(file, {
+				encoding : 'utf8'
+			}, function(err, data) {
+				if (err) {
+					reject(err);
+				} else {
+					var metadata = {
+							"id" : article.id,
+							"title" : article.title,
+							"abstract" : getAbstract(data),
+							"tag" : (article.tag && article.tag.split(',')) || []
+					};
+					resolve(metadata);
+				}
+			});
+		} else {
+			fs.writeFile(file, article.content, {encoding: 'utf8'}, function (err) {
+				if (err) reject(err);
+				var metadata = {
+						"id" : article.id,
+						"title" : article.title,
+						"abstract" : getAbstract(article.content),
+						"tag" : (article.tag && article.tag.split(',')) || []
+				};
+				resolve(metadata);
+			});
+		}
 	});
 	return promise;
 }
