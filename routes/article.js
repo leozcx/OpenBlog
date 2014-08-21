@@ -27,9 +27,13 @@ router.get('/:id', function(req, res) {
 
 router.post('/', function(req, res) {
 	var data = req.body;
-	var upload = req.files ? true : false;
-	data.id = req.files ? req.files.file.name.split('.')[0] : util.generateId();
-	console.log(data)
+	var upload = req.files.file ? true : false;
+	if(upload) {
+		data.file = req.files.file.name;
+		data.id = data.file.split('.')[0];
+	} else {
+		data.id = data.file = util.generateId();
+	}
 	util.save(data, upload).then(function(ret) {
 		res.json(ret);
 	});

@@ -6,3 +6,10 @@
 .title {
 	margin-top: 0;
 }
+
+#progress {
+	position: absolute;
+	top: 50px;
+	padding: 5px 10px;
+	left: 50%;
+}

@@ -9,5 +9,12 @@ html
     script(type='text/javascript', src='/javascripts/jquery-source/jquery-1.11.1.js')
     script(type='text/javascript', src='/javascripts/jquery-source/bootstrap.js')
     script(type='text/javascript', src='/javascripts/jquery-source/summernote.js')
+    script(type='text/javascript', src='/javascripts/jquery-source/pubsub.js')
+    script(src='i18next/i18next.js', type='text/javascript')
+    script.
+        $(function() {
+            $.i18n.init({ resGetPath: 'locales/__lng__/__ns__.json', fallbackLng: 'en' }, function() { 
+            });
+        });
   body.container
     block content

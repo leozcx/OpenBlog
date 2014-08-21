@@ -21,14 +21,15 @@ mixin deleteArticleConfirmDialog(params)
 		$('##{params.id}ConfirmButton').click(function() {
 			var articleId = $("##{params.id}").attr("articleId");
 			var articlePanelId = articleId + "panel";
+			publish('progress/show', [$.t('deleting'), 'label-info']);
 			$.ajax({
 				url: "/a/" + articleId,
 				type: "DELETE",
 				context: document.body
 			}).done(function(resp) {
-			
-			}, function(err) {
-				console.log(err);
+				publish('progress/show', [$.t('deleted'), 'label-info']);
+			}).fail(function(err) {
+				publish('progress/show', [err, 'label-error', 0]);
 			});
 			$("#" + articlePanelId).remove();
 		});

@@ -23,3 +23,23 @@ header
 					ul.nav.navbar-nav.navbar-right
 						li
 							a(href="#")= t('logout')
+	div.label.label-info.hide#progress haha
+	script.
+		subscribe("progress/show", function(message, className, duration) {
+			var progress = $('#progress');
+			progress.addClass(className ? className : 'label-info');
+			progress.removeClass('hide');
+			progress.html(message);
+			if(duration === 0) {
+				return;
+			}
+			setTimeout(function() {
+				progress.addClass('hide');
+			}, duration ? duration : 4000);
+		});
+		
+		subscribe("progress/hide", function() {
+			var progress = $('#progress');
+			progress.addClass('hide');
+			progress.html('');
+		});

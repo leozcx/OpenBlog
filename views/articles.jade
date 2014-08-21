@@ -5,10 +5,15 @@ block content
 	include abstract.jade
 	section
 		- var params = {"id": "deleteArticleConfirm", "text": t('confirm_delete')};
-		- console.log(t('confirm_delete'));
-		each article in articles
-			+abstract(article, params)
-		+deleteArticleConfirmDialog(params)
+		- if(articles.length === 0) {
+			.panel.panel-default
+				.panel-body
+					p= t('no_article')
+		- } else {
+			each article in articles
+				+abstract(article, params)
+			+deleteArticleConfirmDialog(params)
+		- }
 		form.form-horizontal.hide#articleForm(role="form", enctype='multipart/form-data')
 			div.form-group
 				label.col-sm-1.control-label(for="inputTitle")= t('title')
@@ -36,12 +41,13 @@ block content
 							var articleTextarea = $('#article-textarea');
 							$("#newArticleButton").click((function() {
 								articleForm.removeClass('hide');
-								console.log(articleTextarea);
 								articleTextarea.summernote({
 									height: 200
 								});
+								$('html, body, .container').animate({scrollTop: $(document).height()}, 300); 
 							}));
 							$('#saveArticleButton').click(function() {
+								publish('progress/show', [$.t('saving'), 'label-info']);
 								articleForm.addClass('hide');
 								var title = $('#inputTitle').val();
 								var tag = $('#inputTag').val();
@@ -49,7 +55,7 @@ block content
 								data.append('title', title);
 								data.append('tag', tag);
 								var files = $('#inputContent')[0].files;
-								if(files) {
+								if(files.length > 0) {
 									data.append('file', files[0]);
 								} else {
 									var sHTML = articleTextarea.code();
@@ -63,8 +69,10 @@ block content
 									contentType:false,
 									processData:false
 									}).done(function(resp) {
-										console.log(resp);
+										publish('progress/show', [$.t('saved'), 'label-info']);
 										articleTextarea.destroy();
+									}).fail(function(resp) {
+										publish('progress/show', [$.t('saving'), 'label-error', 0]);
 									});
 							});
 							$('##{params.id}ConfirmButton').click(function() {

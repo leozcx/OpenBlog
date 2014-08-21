@@ -119,7 +119,7 @@ function save(article, upload) {
 function saveContent(article, upload) {
 	var promise = new Promise(function(resolve, reject) {
 		//if is upload, file is saved directly, but we need get abstract
-		var file = path.join(articlePath, article.id);
+		var file = path.join(articlePath, article.file);
 		if(upload) {
 			fs.readFile(file, {
 				encoding : 'utf8'
@@ -129,10 +129,13 @@ function saveContent(article, upload) {
 				} else {
 					var metadata = {
 							"id" : article.id,
+							"file" : article.file,
 							"title" : article.title,
-							"abstract" : getAbstract(data),
-							"tag" : (article.tag && article.tag.split(',')) || []
+							"abstract" : getAbstract(data)
 					};
+					if(article.tag) {
+						metadata.tag = article.tag.split(',');
+					}
 					resolve(metadata);
 				}
 			});
@@ -141,10 +144,13 @@ function saveContent(article, upload) {
 				if (err) reject(err);
 				var metadata = {
 						"id" : article.id,
+						"file" : article.id,
 						"title" : article.title,
-						"abstract" : getAbstract(article.content),
-						"tag" : (article.tag && article.tag.split(',')) || []
+						"abstract" : getAbstract(article.content)
 				};
+				if(article.tag) {
+					metadata.tag = article.tag.split(',');
+				}
 				resolve(metadata);
 			});
 		}

@@ -15,6 +15,7 @@
 		"delete": "Delete"
 	},
 	"save": "Save",
+	"saving": "saving",
 	"title": "Title",
 	"tag": "Tag",
 	"tag_hint": "tag, split with comma(,)"

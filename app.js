@@ -32,6 +32,9 @@ app.use(multer({ dest: util.articlePath,
 
 app.use(i18n.handle);
 i18n.registerAppHelper(app)
+i18n.serveClientScript(app)
+    .serveDynamicResources(app)
+    .serveMissingKeyRoute(app);
 
 app.use('/', routes);
 app.use('/resume', resume);

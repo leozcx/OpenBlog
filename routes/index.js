@@ -10,7 +10,7 @@ var util = require('../util');
 router.get('/', function(req, res) {
 	util.load().then(function(articles) {
 		async.each(articles, function(article, callback) {
-			article.url = util.articleUrl + "/" + article.id;
+			article.url = util.articleUrl + "/" + article.file;
 			callback();
 		}, function(err) {
 			if(!err) {
