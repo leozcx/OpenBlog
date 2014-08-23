@@ -7,13 +7,7 @@ mixin abstract(article, params)
 				div
 					a.btn.btn-link(href=article.url)= t('article.full')
 					- if(admin)
-						button.btn.btn-link.pull-right(data-toggle="modal", id="#{article.id}DeleteButton")= t('article.delete')
-						script.
-							$('##{article.id}DeleteButton').click(function() {
-								console.log("delted");
-								$("##{params.id}").modal();
-								$("##{params.id}").attr("articleId", "#{article.id}");
-							});
+						button.btn.btn-link.pull-right(data-toggle="modal", data-article-id="#{article.id}", id="#{article.id}DeleteButton")= t('article.delete')
 
 mixin deleteArticleConfirmDialog(params)
 	include confirm-dialog.jade

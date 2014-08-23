@@ -21,9 +21,7 @@ block content
 					input.form-control#inputTitle(type="text", placeholder=t('title'))
 				div.col-sm-3
 					button.btn.btn-primary#saveArticleButton(type="button")= t('save')
-					- var params = {"id": "discardConfirm", "text": t('confirm_discard')};
-					button.btn.btn-link#discardAritcleButton(type="button", data-toggle="modal", data-target="##{params.id}")= t('discard')
-					include confirm-dialog.jade
+					button.btn.btn-link#discardAritcleButton(type="button", data-toggle="modal")= t('discard')
 			div.form-group
 				label.col-sm-1.control-label(for="inputTag")= t('tag')
 				div.col-sm-8
@@ -35,47 +33,3 @@ block content
 					input#inputContent(type='file')
 					span.help-block= t('content_hint_type')
 			textarea#article-textarea.hide
-			- if(admin)
-						script.
-							var articleForm = $('#articleForm');
-							var articleTextarea = $('#article-textarea');
-							$("#newArticleButton").click((function() {
-								articleForm.removeClass('hide');
-								articleTextarea.summernote({
-									height: 200
-								});
-								$('html, body, .container').animate({scrollTop: $(document).height()}, 300); 
-							}));
-							$('#saveArticleButton').click(function() {
-								publish('progress/show', [$.t('saving'), 'label-info']);
-								articleForm.addClass('hide');
-								var title = $('#inputTitle').val();
-								var tag = $('#inputTag').val();
-								var data = new FormData();
-								data.append('title', title);
-								data.append('tag', tag);
-								var files = $('#inputContent')[0].files;
-								if(files.length > 0) {
-									data.append('file', files[0]);
-								} else {
-									var sHTML = articleTextarea.code();
-									data.append('content', sHTML);
-								}
-								$.ajax({
-									url: "/a",
-									type: "POST",
-									context: document.body,
-									data: data,
-									contentType:false,
-									processData:false
-									}).done(function(resp) {
-										publish('progress/show', [$.t('saved'), 'label-info']);
-										articleTextarea.destroy();
-									}).fail(function(resp) {
-										publish('progress/show', [$.t('saving'), 'label-error', 0]);
-									});
-							});
-							$('##{params.id}ConfirmButton').click(function() {
-								articleForm.addClass('hide');
-								articleTextarea.destroy();
-							});

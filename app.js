@@ -8,6 +8,7 @@ var i18n = require('i18next');
 var multer = require('multer');
 
 var routes = require('./routes/index');
+var articles = require('./routes/articles');
 var resume = require('./routes/resume');
 var article = require('./routes/article');
 
@@ -31,18 +32,19 @@ app.use(multer({ dest: util.articlePath,
 	  }}));
 
 app.use(i18n.handle);
-i18n.registerAppHelper(app)
+i18n.registerAppHelper(app);
 i18n.serveClientScript(app)
     .serveDynamicResources(app)
     .serveMissingKeyRoute(app);
 
 app.use('/', routes);
+app.use('/articles', articles);
 app.use('/resume', resume);
 app.use(util.articleUrl, article);
 
 util.init();
 i18n.init({ resGetPath: 'public/locales/__lng__/__ns__.json',
-	fallbackLng: 'en' }, function() {
+	fallbackLng: 'en-US' }, function() {
 		console.log(i18n.t("create"));
 	});
 
