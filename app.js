@@ -8,7 +8,6 @@ var i18n = require('i18next');
 var multer = require('multer');
 
 var routes = require('./routes/index');
-var articles = require('./routes/articles');
 var resume = require('./routes/resume');
 var article = require('./routes/article');
 
@@ -38,7 +37,6 @@ i18n.serveClientScript(app)
     .serveMissingKeyRoute(app);
 
 app.use('/', routes);
-app.use('/articles', articles);
 app.use('/resume', resume);
 app.use(util.articleUrl, article);
 

@@ -7,7 +7,7 @@ var async = require('async');
 var metaFile = path.join(__dirname, 'doc', 'metadata.json');
 var indexFile = path.join(__dirname, 'doc', 'index.json');
 var articlePath = path.join(__dirname, 'articles');
-var articleUrl = '/a';
+var articleUrl = '/article';
 
 var jsonMeta = null, index = null;;
 

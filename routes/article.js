@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var async = require('async');
 var fs = require('fs'), path = require('path'), util = require('../util'), md = require('markdown').markdown;
 
 router.get('/:id', function(req, res) {
@@ -23,6 +24,22 @@ router.get('/:id', function(req, res) {
 			console.log('Dosenot exist');
 		}
 	});
+});
+
+router.get('/', function(req, res) {
+	util.load().then(function(articles) {
+		async.each(articles, function(article, callback) {
+			article.url = util.articleUrl + "/" + article.file;
+			callback();
+		}, function(err) {
+			if(!err) {
+				res.json(articles);
+			}
+		});
+	}, function(err) {
+		console.log(err);
+	});
+	
 });
 
 router.post('/', function(req, res) {

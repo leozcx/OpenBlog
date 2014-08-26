@@ -14,6 +14,7 @@ define(['jquery', 'underscore', 'backbone', 'text!views/templates/CreateArticle.
 			this.confirmDialog.show();
 		},
 		
+		
 		save: function() {
 			var self = this;
 			publish('progress/show', [$.t('saving'), 'label-info']);
@@ -30,7 +31,7 @@ define(['jquery', 'underscore', 'backbone', 'text!views/templates/CreateArticle.
 				data.append('content', sHTML);
 			}
 			$.ajax({
-				url : "/a",
+				url : "/article",
 				type : "POST",
 				context : document.body,
 				data : data,

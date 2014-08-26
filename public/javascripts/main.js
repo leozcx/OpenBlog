@@ -11,23 +11,38 @@ require.config({
 	}
 });
 
-require(["jquery", "dialog", "views/articles", "views/CreateArticle", "pubsub", "i18next", "bootstrap", "summernote"], function($, dialog, ArticlesView, CreateArticleView) {
+require([ "jquery", "dialog", "views/articles", "views/CreateArticle", "collections/articles",
+		"pubsub", "i18next", "bootstrap", "summernote" ], function($, dialog,
+		ArticlesView, CreateArticleView, ArticleCollection) {
 	$(function() {
-		//---------------------
+		// ---------------------
 		i18n.init({
 			resGetPath : 'locales/__lng__/__ns__.json',
 			fallbackLng : 'en-US'
 		}, function() {
-			var abstract = new ArticlesView();
-			//abstract.render();
-			$('section').append(abstract.el);
+			$.ajax({
+				type : "GET",
+				url : "/article"
+			}).done(function(resp) {
+				var collection = new ArticleCollection(resp, {
+					url: "/article"
+				});
+				var abs = new ArticlesView({
+					collection: collection
+				});
+				abs.render();
+				$('section').append(abs.el);
+			}).fail(function(error) {
+				publish('progress/show', [ error, 'label-error', 0 ]);
+			});
+
 			var articleForm = $('#articleForm');
 			var articleTextarea = $('#article-textarea');
 			$("#newArticleButton").click((function() {
 				var createArticleView = new CreateArticleView();
 				createArticleView.onSave = function(a) {
 					console.log(a);
-					abstract.model.add(a);
+					collection.add(a);
 				};
 				createArticleView.render();
 				$('section').append(createArticleView.el);
@@ -40,7 +55,7 @@ require(["jquery", "dialog", "views/articles", "views/CreateArticle", "pubsub", 
 
 		subscribe("progress/show", function(message, className, duration) {
 			var progress = $('#progress');
-			progress.addClass( className ? className : 'label-info');
+			progress.addClass(className ? className : 'label-info');
 			progress.removeClass('hide');
 			progress.html(message);
 			if (duration === 0) {

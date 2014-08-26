@@ -1,8 +1,8 @@
 <div class="panel panel-default">
 	<div class="panel-body">
-		<h2 class="title"><%= model.title%></h2>
+		<h2 class="title"><%= model.get('title')%></h2>
 		<div>
-			<p><%= model.abstract%></p>
+			<p><%= model.get('abstract')%></p>
 			<div>
 				<button class="btn btn-link pull-right" id="<%= delButtonId%>"><%= i18n.t('delete')%></button>
 			</div>
