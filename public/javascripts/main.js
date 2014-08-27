@@ -14,8 +14,23 @@ require.config({
 require([ "jquery", "dialog", "views/articles", "views/CreateArticle", "collections/articles",
 		"pubsub", "i18next", "bootstrap", "summernote" ], function($, dialog,
 		ArticlesView, CreateArticleView, ArticleCollection) {
+	var collection = null;
+	var articlesView = null;
+	
+	function createCollection(articles) {
+		if(collection == null) {
+			collection = new ArticleCollection(articles, {});
+			articlesView = new ArticlesView({
+				collection: collection
+			});
+			articlesView.render();
+			$('section').append(articlesView.el);
+		}
+	}
+	
 	$(function() {
 		// ---------------------
+		
 		i18n.init({
 			resGetPath : 'locales/__lng__/__ns__.json',
 			fallbackLng : 'en-US'
@@ -24,14 +39,7 @@ require([ "jquery", "dialog", "views/articles", "views/CreateArticle", "collecti
 				type : "GET",
 				url : "/article"
 			}).done(function(resp) {
-				var collection = new ArticleCollection(resp, {
-					url: "/article"
-				});
-				var abs = new ArticlesView({
-					collection: collection
-				});
-				abs.render();
-				$('section').append(abs.el);
+				createCollection(resp);
 			}).fail(function(error) {
 				publish('progress/show', [ error, 'label-error', 0 ]);
 			});
@@ -41,7 +49,6 @@ require([ "jquery", "dialog", "views/articles", "views/CreateArticle", "collecti
 			$("#newArticleButton").click((function() {
 				var createArticleView = new CreateArticleView();
 				createArticleView.onSave = function(a) {
-					console.log(a);
 					collection.add(a);
 				};
 				createArticleView.render();
