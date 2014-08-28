@@ -1,5 +1,8 @@
 extends layout
 
+block head
+	script(data-main="/javascripts/main", src='/javascripts/vendor/require.js')
+
 block content
 	include nav.jade
 	section
