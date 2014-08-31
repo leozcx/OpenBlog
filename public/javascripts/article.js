@@ -1,4 +1,4 @@
-define(["jquery", "dialog", "views/articles", "views/CreateArticle", "collections/articles", "views/Tag", "pubsub", "i18next", "bootstrap", "summernote"], function($, dialog, ArticlesView, CreateArticleView, ArticleCollection, TagView) {
+define(["jquery", "views/articles", "views/CreateArticle", "collections/articles", "views/Tag", "pubsub", "i18next", "bootstrap", "summernote"], function($,  ArticlesView, CreateArticleView, ArticleCollection, TagView) {
 
 	var ArticlePage = function() {
 		return {
@@ -16,8 +16,8 @@ define(["jquery", "dialog", "views/articles", "views/CreateArticle", "collection
 					type : "GET",
 					url : "/article"
 				}).done(function(resp) {
-					self.createTag(resp);
 					self.createCollection(resp, 'all');
+					self.createTag(self.collectionMap['all']);
 				}).fail(function(error) {
 					publish('progress/show', [error, 'label-error', 0]);
 				});
@@ -42,6 +42,7 @@ define(["jquery", "dialog", "views/articles", "views/CreateArticle", "collection
 			},
 
 			initEvent : function() {
+				var self = this;
 				subscribe("progress/show", function(message, className, duration) {
 					var progress = $('#progress');
 					progress.addClass( className ? className : 'label-info');
@@ -77,13 +78,13 @@ define(["jquery", "dialog", "views/articles", "views/CreateArticle", "collection
 				$('section').append(this.articlesView.el);
 			},
 
-			createTag : function(articles) {
-				tagView = new TagView({
-					model : articles
+			createTag : function(collection) {
+				this.tagView = new TagView({
+					collection : collection
 				});
-				tagView.articlePage = this;
-				tagView.render();
-				$('section').append(tagView.el);
+				this.tagView.articlePage = this;
+				this.tagView.render();
+				$('section').prepend(this.tagView.el);
 			}
 		};
 	};

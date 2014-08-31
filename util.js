@@ -127,31 +127,15 @@ function saveContent(article, upload) {
 				if (err) {
 					reject(err);
 				} else {
-					var metadata = {
-							"id" : article.id,
-							"file" : article.file,
-							"title" : article.title,
-							"abstract" : getAbstract(data)
-					};
-					if(article.tag) {
-						metadata.tag = article.tag.split(',');
-					}
-					resolve(metadata);
+					article.abstract = getAbstract(data);
+					resolve(article);
 				}
 			});
 		} else {
 			fs.writeFile(file, article.content, {encoding: 'utf8'}, function (err) {
 				if (err) reject(err);
-				var metadata = {
-						"id" : article.id,
-						"file" : article.id,
-						"title" : article.title,
-						"abstract" : getAbstract(article.content)
-				};
-				if(article.tag) {
-					metadata.tag = article.tag.split(',');
-				}
-				resolve(metadata);
+				delete article.content;
+				resolve(article);
 			});
 		}
 	});
@@ -219,6 +203,7 @@ function deleteIndex(id) {
 
 exports.init = init;
 exports.load = load;
+exports.getAbstract = getAbstract;
 exports.loadIndex = loadIndex;
 exports.articleUrl = articleUrl;
 exports.articlePath = articlePath;

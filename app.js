@@ -10,6 +10,7 @@ var multer = require('multer');
 var routes = require('./routes/index');
 var resume = require('./routes/resume');
 var article = require('./routes/article');
+var login = require('./routes/login');
 
 var util = require('./util');
 
@@ -37,6 +38,7 @@ i18n.serveClientScript(app)
     .serveMissingKeyRoute(app);
 
 app.use('/', routes);
+app.use('/login', login);
 app.use('/resume', resume);
 app.use(util.articleUrl, article);
 

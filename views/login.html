@@ -1,0 +1,24 @@
+.container#loginContainer
+	.row
+		.col-md-3
+		.col-md-6
+			.panel.panel-default
+				form.form-horizontal(role='form' action='/login' method='post')
+					.form-group
+						label.col-sm-3.control-label(for='userName')= t('username')
+						.col-sm-9
+							input.form-control(type='text' name='userName' id='userName' placeholder=t('username'))
+					.form-group
+						label.col-sm-3.control.label(for='password')= t('password')
+						.col-sm-9
+							input.form-control(type='password' name='password' id='password' placeholder=t('password'))
+					.form-group
+						.col-sm-offset-3.col-sm-9
+							.checkbox
+								label
+									input(type='checkbox')
+					.form-group
+						.col-sm-offset-3.col-sm-9
+							button.btn.btn-default(type='submit')= t('signin')
+		.col-md-3
+

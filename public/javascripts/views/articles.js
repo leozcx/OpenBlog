@@ -25,7 +25,7 @@ define(['underscore', 'backbone', 'views/article', 'views/confirmDialog'], funct
 			});
 			template.listenTo(article, "sync", function() {
 				template.remove();
-			})
+			});
 			template = _.extend(template, {
 				onDelete : function() {
 					self.confirmDialog.show();

@@ -6,18 +6,27 @@ define(['jquery', 'underscore', 'backbone', 'article'], function($, _, Backbone)
 		attributes : {
 			"role" : "tablist"
 		},
+		
+		initialize: function() {
+			this.listenTo(this.collection, 'remove', function() {
+				this.refresh();
+			});
+			this.listenTo(this.collection, 'add', function() {
+				this.refresh();
+			});
+		},
 
 		render : function() {
 			var self = this;
 			var tagMap = {
 				"all" : {
-					count : this.model.length,
+					count : this.collection.length,
 					label : i18n.t('all'),
-					articles : this.model
+					articles : this.collection.models
 				}
 			};
-			this.model.forEach(function(item) {
-				var tag = item.tag;
+			this.collection.forEach(function(item) {
+				var tag = item.get('tag');
 				if (tag && tag.length > 0) {
 					tag.forEach(function(t) {
 						var tagId = "tag_" + t.trim();
@@ -47,6 +56,11 @@ define(['jquery', 'underscore', 'backbone', 'article'], function($, _, Backbone)
 				})(tag, tagHtml);
 				this.$el.append(tagHtml);
 			}
+		},
+		
+		refresh: function() {
+			this.$el.empty();
+			this.render();
 		}
 	});
 	return TagView;

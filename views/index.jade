@@ -2,6 +2,8 @@ extends layout
 
 block head
 	script(data-main="/javascripts/main", src='/javascripts/vendor/require.js')
+	link(rel='stylesheet', href='/stylesheets/summernote.css', type='text/css', media='all')
+	link(rel='stylesheet', href='/stylesheets/font-awesome.css', type='text/css', media='all')
 
 block content
 	include nav.jade

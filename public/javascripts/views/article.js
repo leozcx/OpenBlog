@@ -1,8 +1,10 @@
-define(['jquery', 'underscore', 'backbone', 'text!views/templates/article.html'], function($, _, Backbone, template) {
+define(['jquery', 'underscore', 'backbone', 'text!views/templates/article.html', 'util'], function($, _, Backbone, template, Util) {
 	var ArticleView = Backbone.View.extend({
 
 		initialize : function() {
 			this.delButtonId = this.model.id + "_delete";
+			this.createdOn = this.model.get('createdOn');
+			this.createdOn = this.createdOn ? Util.formatDate(new Date(this.createdOn), "yyyy-MM-dd") : "";
 		},
 
 		events : function() {

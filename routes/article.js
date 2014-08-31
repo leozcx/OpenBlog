@@ -7,15 +7,22 @@ router.get('/:id', function(req, res) {
 	var fileName = req.params.id;
 	var name = path.join(util.articlePath, fileName);
 	fs.exists(name, function(exists) {
-		if(exists) {
-			fs.readFile(name, {encoding: 'utf8'}, function(err, data) {
-				if(err) {
+		if (exists) {
+			fs.readFile(name, {
+				encoding : 'utf8'
+			}, function(err, data) {
+				if (err) {
 					return;
 				}
 				var html = md.toHTML(data);
 				util.loadIndex().then(function(index) {
 					var meta = index[req.params.id];
-					res.render('article', { article: {title: meta.title, content: data} });
+					res.render('article', {
+						article : {
+							title : meta.title,
+							content : data
+						}
+					});
 				}, function(err) {
 					console.log(err);
 				});
@@ -32,25 +39,30 @@ router.get('/', function(req, res) {
 			article.url = util.articleUrl + "/" + article.file;
 			callback();
 		}, function(err) {
-			if(!err) {
+			if (!err) {
 				res.json(articles);
 			}
 		});
 	}, function(err) {
 		console.log(err);
 	});
-	
+
 });
 
 router.post('/', function(req, res) {
 	var data = req.body;
 	var upload = req.files.file ? true : false;
-	if(upload) {
+	if (upload) {
 		data.file = req.files.file.name;
 		data.id = data.file.split('.')[0];
 	} else {
 		data.id = data.file = util.generateId();
+		data.abstract = util.getAbstract(data.content);
 	}
+	if (data.tag) {
+		data.tag = data.tag.split(',');
+	}
+	data.createdOn = new Date().getTime();
 	util.save(data, upload).then(function(ret) {
 		res.json(ret);
 	});
@@ -58,9 +70,10 @@ router.post('/', function(req, res) {
 
 router.delete('/:id', function(req, res) {
 	util.deleteArticle(req.params.id).then(function(ret) {
-		res.json({"id": ret});
+		res.json({
+			"id" : ret
+		});
 	});
 });
-	
 
 module.exports = router;
