@@ -6,7 +6,7 @@ var md = markdown.markdown;
 
 /* GET home page. */
 router.get('/', function(req, res) {
-	res.render('index', { admin: true });
+	res.render('index', { user: req.user });
 	
 });
 

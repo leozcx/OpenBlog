@@ -4,8 +4,10 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 var i18n = require('i18next');
 var multer = require('multer');
+var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 
 var routes = require('./routes/index');
 var resume = require('./routes/resume');
@@ -25,6 +27,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+app.use(session({ secret: 'keyboard cat' }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(multer({ dest: util.articlePath,
 	rename: function (fieldname, filename) {
@@ -37,10 +42,31 @@ i18n.serveClientScript(app)
     .serveDynamicResources(app)
     .serveMissingKeyRoute(app);
 
+//passport
+passport.use(new LocalStrategy(function(username, password, done) {
+	return done(null, {id: username});
+}));
+
 app.use('/', routes);
-app.use('/login', login);
+//app.use('/login', login);
 app.use('/resume', resume);
 app.use(util.articleUrl, article);
+
+app.route('/login').get(function(req, res) {
+	res.render('login');
+}).post(passport.authenticate('local', { successRedirect: '../',
+        failureRedirect: '/login',
+        failureFlash: true }));
+passport.serializeUser(function(user, done) {
+	done(null, user.id);
+});
+passport.deserializeUser(function(id, done) {
+	done(null, {"id": id, "displayName": "amdin"});
+});
+app.get('/logout', function(req, res){
+	req.logout();
+	res.redirect('/');
+});
 
 util.init();
 i18n.init({ resGetPath: 'public/locales/__lng__/__ns__.json',

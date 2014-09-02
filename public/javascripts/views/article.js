@@ -25,6 +25,9 @@ define(['jquery', 'underscore', 'backbone', 'text!views/templates/article.html',
 		render : function() {
 			var compiledTemplate = _.template(template, this);
 			this.$el.append(compiledTemplate);
+			if(window.user == undefined) {
+				this.$('#'+this.delButtonId).remove();
+			}
 		}
 	});
 	return ArticleView;

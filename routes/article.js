@@ -34,6 +34,7 @@ router.get('/:id', function(req, res) {
 });
 
 router.get('/', function(req, res) {
+	console.log(req.user);
 	util.load().then(function(articles) {
 		async.each(articles, function(article, callback) {
 			article.url = util.articleUrl + "/" + article.file;
