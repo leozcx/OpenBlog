@@ -1,0 +1,33 @@
+extends layout
+
+block content
+	include nav.jade
+	- if(user)
+		section
+			.row
+				.col-md-6
+					.panel.panel-default
+						.panel-heading= t('change_password')
+						.panel-body
+							form.form-horizontal(role='form' action='/profile' method='post')
+								.form-group
+									label.col-sm-3.control-label(for='userName')= t('userDisplayName')
+									.col-sm-9
+										input.form-control(type='text' name='username' id='username' placeholder=t('userDisplayName') value='#{user.displayName}')
+								.form-group
+									label.col-sm-3.control-label(for='oldPassword')= t('oldPassword')
+									.col-sm-9
+										input.form-control(type='password' name='oldPassword' id='oldPassword' placeholder=t('oldPassword'))
+								.form-group
+									label.col-sm-3.control-label(for='newPassword')= t('newPassword')
+									.col-sm-9
+										input.form-control(type='password' name='newPassword' id='newPassword' placeholder=t('newPassword'))
+								.form-group
+									label.col-sm-3.control-label(for='confirmPassword')= t('confirmPassword')
+									.col-sm-9
+										input.form-control(type='password' name='confirmPassword' id='confirmPassword' placeholder=t('confirmPassword'))
+								.form-group
+									.col-sm-offset-3.col-sm-9
+										button.btn.btn-default(type='submit')= t('submit')
+
+

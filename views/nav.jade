@@ -15,7 +15,8 @@ header
 				+navItem((page == "how"), "How", "#")
 			div
 				- if(user)
-					p.navbar-text.navbar-right= user.displayName
+					p.navbar-text.navbar-right
+						a.navbar-link(href='/profile')= user.displayName
 					ul.nav.navbar-nav.navbar-right
 						li
 							a(href="/logout")= t('logout')

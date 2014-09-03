@@ -13,6 +13,7 @@ var routes = require('./routes/index');
 var resume = require('./routes/resume');
 var article = require('./routes/article');
 var login = require('./routes/login');
+var profile = require('./routes/profile');
 
 var util = require('./util');
 
@@ -48,7 +49,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 }));
 
 app.use('/', routes);
-//app.use('/login', login);
+app.use('/profile', profile);
 app.use('/resume', resume);
 app.use(util.articleUrl, article);
 

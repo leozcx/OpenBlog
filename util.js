@@ -3,11 +3,14 @@ var fs = require('fs');
 var path = require('path');
 var Promise = require('promise');
 var async = require('async');
+var crypto = require('crypto');
 
 var metaFile = path.join(__dirname, 'doc', 'metadata.json');
 var indexFile = path.join(__dirname, 'doc', 'index.json');
 var articlePath = path.join(__dirname, 'articles');
 var articleUrl = '/article';
+var pwdFile = path.join(__dirname, 'doc', 'passwd');
+var saltFile = path.join(__dirname, 'doc', 'salt');
 
 var jsonMeta = null, index = null;;
 
@@ -201,6 +204,85 @@ function deleteIndex(id) {
 	return saveIndex(id);
 }
 
+function getUser(userId) {
+	return new Promise(function(resolve, reject) {
+		fs.readFile(pwdFile, {encoding: 'utf8'}, function(err,data) {
+			if(err) 
+				reject(err);
+			else {
+				//id:password:displayName
+				var line = data.split(':');
+				var user = {
+					id: line[0],
+					password: line[1],
+					displayName: line[2]
+				};
+				resolve(user);
+			}
+		});
+	});
+}
+
+function saveSalt(salt) {
+	return new Promise(function(resolve, reject) {
+		fs.writeFile(saltFile, salt, {encoding: 'utf8'}, function(err) {
+			if(err)
+				reject(err);
+			else
+				resolve(salt);
+		});
+	});
+}
+
+function getSalt() {
+	return new Promise(function(resolve, reject) {
+		fs.readFile(saltFile, {encoding: 'utf8'}, function(err, data) {
+			if(err)
+				reject(err);
+			else
+				resolve(data);
+		});
+	});
+}
+
+function generateSalt() {
+	var salt = '';
+	for (var i = 0; i < 4; i++) {
+		salt += Math.floor(Math.random() * 16).toString(16);
+	}
+	return salt;
+}
+
+function encrypt(password, salt) {
+	return crypto.createHash('sha1').update(password + salt).digest('hex');
+}
+
+function checkPassword(userId, password) {
+	return getSalt().then(function(salt) {
+			var inputPassword = encrypt(password, salt);
+			getUser(userId).then(function(user) {
+				return user.password == inputPassword;
+			})
+		});
+}
+
+function savePassword(userId, password) {
+	return new Promise(function(resolve, reject) {
+		var salt = generateSalt();
+		var encryptedPassword = encrypt(password, salt);
+		var content = userId + ":"+encryptedPassword+":"+userId;
+		fs.writeFile(pwdFile, content, {encoding: 'utf8'}, function(err) {
+			if(err)
+				reject(err);
+			else {
+				saveSalt(salt).then(function(salt) {
+					resolve(userId);
+				})
+			}
+		});
+	});
+}
+
 exports.init = init;
 exports.load = load;
 exports.getAbstract = getAbstract;
@@ -210,3 +292,4 @@ exports.articlePath = articlePath;
 exports.generateId = generateId;
 exports.save = save;
 exports.deleteArticle = deleteArticle;
+exports.savePassword = savePassword;
