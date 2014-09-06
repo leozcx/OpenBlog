@@ -257,12 +257,10 @@ function encrypt(password, salt) {
 	return crypto.createHash('sha1').update(password + salt).digest('hex');
 }
 
-function checkPassword(userId, password) {
+function verifyPassword(user, password) {
 	return getSalt().then(function(salt) {
 			var inputPassword = encrypt(password, salt);
-			getUser(userId).then(function(user) {
-				return user.password == inputPassword;
-			})
+			return user.password == inputPassword;
 		});
 }
 
@@ -293,3 +291,5 @@ exports.generateId = generateId;
 exports.save = save;
 exports.deleteArticle = deleteArticle;
 exports.savePassword = savePassword;
+exports.verifyPassword = verifyPassword;
+exports.getUser = getUser;

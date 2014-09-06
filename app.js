@@ -8,6 +8,7 @@ var session = require('express-session');
 var i18n = require('i18next');
 var multer = require('multer');
 var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+var flash = require('connect-flash');
 
 var routes = require('./routes/index');
 var resume = require('./routes/resume');
@@ -29,6 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -45,7 +47,17 @@ i18n.serveClientScript(app)
 
 //passport
 passport.use(new LocalStrategy(function(username, password, done) {
-	return done(null, {id: username});
+	util.getUser(username).then(function(user) {
+		util.verifyPassword(user, password).then(function(result) {
+			if(result)
+				return done(null, user);
+			else {
+				return done(null, false, {'message': i18n.t('invalid_user')})
+			}	
+		}, function(err) {
+			return done(err, false);
+		});
+	});
 }));
 
 app.use('/', routes);
@@ -54,7 +66,9 @@ app.use('/resume', resume);
 app.use(util.articleUrl, article);
 
 app.route('/login').get(function(req, res) {
-	res.render('login');
+	var error = req.flash('error');
+	var data = error.length > 0 ? {message: error[0]} : null;
+	res.render('login', data);
 }).post(passport.authenticate('local', { successRedirect: '../',
         failureRedirect: '/login',
         failureFlash: true }));
@@ -72,7 +86,6 @@ app.get('/logout', function(req, res){
 util.init();
 i18n.init({ resGetPath: 'public/locales/__lng__/__ns__.json',
 	fallbackLng: 'en-US' }, function() {
-		console.log(i18n.t("create"));
 	});
 
 /// catch 404 and forwarding to error handler

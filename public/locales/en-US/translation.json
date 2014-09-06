@@ -15,6 +15,7 @@
 		"full": "Full article",
 		"delete": "Delete"
 	},
+	"invalid_user": "Invalid user or password.",
 	"save": "Save",
 	"saving": "saving",
 	"title": "Title",
