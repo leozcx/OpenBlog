@@ -4,40 +4,35 @@ var async = require('async');
 var fs = require('fs'), path = require('path'), util = require('../util'), md = require('markdown').markdown;
 
 router.get('/:id', function(req, res) {
-	var fileName = req.params.id;
-	var name = path.join(util.articlePath, fileName);
-	fs.exists(name, function(exists) {
-		if (exists) {
-			fs.readFile(name, {
-				encoding : 'utf8'
-			}, function(err, data) {
-				if (err) {
-					return;
-				}
-				var html = md.toHTML(data);
-				util.loadIndex().then(function(index) {
-					var meta = index[req.params.id];
-					res.render('article', {
-						article : {
-							title : meta.title,
-							content : data
-						}
-					});
-				}, function(err) {
-					console.log(err);
+	util.loadIndex().then(function(index) {
+		var meta = index[req.params.id];
+		var name = path.join(util.articlePath, meta.file);
+		fs.readFile(name, {
+			encoding : 'utf8'
+		}, function(err, data) {
+			if (err) {
+				return;
+			}
+			var html = md.toHTML(data);
+			util.loadIndex().then(function(index) {
+				var meta = index[req.params.id];
+				res.render('article', {
+					article : {
+						title : meta.title,
+						content : html
+					}
 				});
+			}, function(err) {
+				console.log(err);
 			});
-		} else {
-			console.log('Dosenot exist');
-		}
+		});
 	});
 });
 
 router.get('/', function(req, res) {
-	console.log(req.user);
 	util.load().then(function(articles) {
 		async.each(articles, function(article, callback) {
-			article.url = util.articleUrl + "/" + article.file;
+			article.url = util.articleUrl + "/" + article.id;
 			callback();
 		}, function(err) {
 			if (!err) {
@@ -65,6 +60,7 @@ router.post('/', function(req, res) {
 	}
 	data.createdOn = new Date().getTime();
 	util.save(data, upload).then(function(ret) {
+		ret.url = util.articleUrl + "/" + ret.id;
 		res.json(ret);
 	});
 });

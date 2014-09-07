@@ -2,10 +2,13 @@ extends layout
 
 block content
 	include nav.jade
-	- if(user)
-		section
+	section
 			.row
 				.col-md-6
+					- if(result && result.status !== 200)
+						.alert.alert-danger(role='alert')= result.message
+					- else if(result && result.status === 200)
+						.alert.alert-success(role='alert')= result.message
 					.panel.panel-default
 						.panel-heading= t('change_password')
 						.panel-body
@@ -13,7 +16,10 @@ block content
 								.form-group
 									label.col-sm-3.control-label(for='userName')= t('userDisplayName')
 									.col-sm-9
-										input.form-control(type='text' name='username' id='username' placeholder=t('userDisplayName') value='#{user.displayName}')
+										- if(user)
+											input.form-control(type='text' name='username' id='username' placeholder=t('userDisplayName') value='#{user.displayName}')
+										- else
+											input.form-control(type='text' name='username' id='username' placeholder=t('userDisplayName'))
 								.form-group
 									label.col-sm-3.control-label(for='oldPassword')= t('oldPassword')
 									.col-sm-9

@@ -52,11 +52,13 @@ passport.use(new LocalStrategy(function(username, password, done) {
 			if(result)
 				return done(null, user);
 			else {
-				return done(null, false, {'message': i18n.t('invalid_user')})
+				return done(null, false, {'message': i18n.t('invalid_user')});
 			}	
 		}, function(err) {
 			return done(err, false);
 		});
+	}, function(err) {
+		console.log(err);
 	});
 }));
 
@@ -73,10 +75,12 @@ app.route('/login').get(function(req, res) {
         failureRedirect: '/login',
         failureFlash: true }));
 passport.serializeUser(function(user, done) {
-	done(null, user.id);
+	console.log("s:")
+	console.log(user)
+	done(null, user);
 });
-passport.deserializeUser(function(id, done) {
-	done(null, {"id": id, "displayName": "amdin"});
+passport.deserializeUser(function(user, done) {
+	done(null, user);
 });
 app.get('/logout', function(req, res){
 	req.logout();

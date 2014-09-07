@@ -4,6 +4,7 @@ var path = require('path');
 var Promise = require('promise');
 var async = require('async');
 var crypto = require('crypto');
+var md = require('markdown').markdown;
 
 var metaFile = path.join(__dirname, 'doc', 'metadata.json');
 var indexFile = path.join(__dirname, 'doc', 'index.json');
@@ -11,6 +12,7 @@ var articlePath = path.join(__dirname, 'articles');
 var articleUrl = '/article';
 var pwdFile = path.join(__dirname, 'doc', 'passwd');
 var saltFile = path.join(__dirname, 'doc', 'salt');
+var admin = 'admin';
 
 var jsonMeta = null, index = null;;
 
@@ -86,7 +88,8 @@ function loadIndex() {
 
 function addIndex(metadata) {
 	index[metadata.id] = {
-		'title': metadata.title
+		'title': metadata.title,
+		'file': metadata.file
 	};
 	return saveIndex(metadata);
 }
@@ -130,7 +133,7 @@ function saveContent(article, upload) {
 				if (err) {
 					reject(err);
 				} else {
-					article.abstract = getAbstract(data);
+					article.abstract = md.toHTML(getAbstract(data));
 					resolve(article);
 				}
 			});
@@ -275,7 +278,7 @@ function savePassword(userId, password) {
 			else {
 				saveSalt(salt).then(function(salt) {
 					resolve(userId);
-				})
+				});
 			}
 		});
 	});
@@ -293,3 +296,4 @@ exports.deleteArticle = deleteArticle;
 exports.savePassword = savePassword;
 exports.verifyPassword = verifyPassword;
 exports.getUser = getUser;
+exports.adminId = admin;

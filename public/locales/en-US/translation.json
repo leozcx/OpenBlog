@@ -15,7 +15,9 @@
 		"full": "Full article",
 		"delete": "Delete"
 	},
+	"pwd_update_success": "Password is updated.",
 	"invalid_user": "Invalid user or password.",
+	"incorrect_password": "Incorrect password",
 	"save": "Save",
 	"saving": "saving",
 	"title": "Title",
