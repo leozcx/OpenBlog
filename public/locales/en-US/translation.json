@@ -13,7 +13,8 @@
 	"login": "Login",
 	"article" : {
 		"full": "Full article",
-		"delete": "Delete"
+		"delete": "Delete",
+		"empty": "You haven't write any article, click \"New\" to write one."
 	},
 	"pwd_update_success": "Password is updated.",
 	"invalid_user": "Invalid user or password.",

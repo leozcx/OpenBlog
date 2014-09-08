@@ -65,7 +65,7 @@ define(['underscore', 'backbone', 'views/article', 'views/confirmDialog'], funct
 		},
 		
 		createNoArticlePanel: function() {
-			var html = '<div class="panel panel-default" id="noArticlePanel"><div class="panel-body">' + i18n.t('no_article') + '</div></div>';
+			var html = '<div class="panel panel-default" id="noArticlePanel"><div class="panel-body">' + i18n.t('article.empty') + '</div></div>';
 			this.$el.append(html);
 		}
 	});

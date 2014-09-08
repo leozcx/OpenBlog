@@ -1,4 +1,3 @@
-
 var fs = require('fs');
 var path = require('path');
 var Promise = require('promise');
@@ -14,34 +13,31 @@ var pwdFile = path.join(__dirname, 'doc', 'passwd');
 var saltFile = path.join(__dirname, 'doc', 'salt');
 var admin = 'admin';
 
-var jsonMeta = null, index = null;;
+var jsonMeta = null, index = null;
+;
 
 function init() {
-	load();
-	loadIndex();
+	load().then(loadIndex);
 }
 
 function load() {
 	var promise = new Promise(function(resolve, reject) {
 		if (jsonMeta)
 			resolve(jsonMeta);
-		fs.exists(metaFile, function(exists) {
-			if (exists) {
-				fs.readFile(metaFile, {
-					encoding : 'utf8'
-				}, function(err, data) {
-					if (err) {
-						reject(err);
-					} else {
-						if (data && data !== "")
-							jsonMeta = JSON.parse(data);
-						else
-							jsonMeta = [];
-						resolve(jsonMeta);
-					}
-				});
+		fs.readFile(metaFile, {
+			encoding : 'utf8'
+		}, function(err, data) {
+			if (err) {
+				if (err.errno === 34) {
+					jsonMeta = [];
+					resolve(jsonMeta);
+				} else
+					reject(err);
 			} else {
-				jsonMeta = [];
+				if (data && data !== "")
+					jsonMeta = JSON.parse(data);
+				else
+					jsonMeta = [];
 				resolve(jsonMeta);
 			}
 		});
@@ -55,67 +51,57 @@ function unload() {
 }
 
 function update() {
-	
+
 }
 
-function loadIndex() {
+function loadIndex(jsonMeta) {
 	var promise = new Promise(function(resolve, reject) {
-		if (index)
+		if(index)
 			resolve(index);
-		fs.exists(indexFile, function(exists) {
-			if (exists) {
-				fs.readFile(indexFile, {
-					encoding : 'utf8'
-				}, function(err, data) {
-					if (err)
-						reject(err);
-					else {
-						if (data && data !== "")
-							index = JSON.parse(data);
-						else
-							index = {};
-						resolve(index);
-					}
-				});
-			} else {
-				index = {};
-				resolve(index);
-			}
-		});
+		else {
+			index = {};
+			jsonMeta.forEach(function(item) {
+				addIndex(item);
+			});
+			resolve(index);
+		}
 	});
 	return promise;
 }
 
 function addIndex(metadata) {
 	index[metadata.id] = {
-		'title': metadata.title,
-		'file': metadata.file
+		'title' : metadata.title,
+		'file' : metadata.file,
+		'markdown': metadata.markdown
 	};
 	return saveIndex(metadata);
 }
 
 function saveIndex(metadata) {
 	var promise = new Promise(function(resolve, reject) {
-		fs.writeFile(indexFile, JSON.stringify(index), {encoding: 'utf8'}, function(err) {
-			if(err) {
+		fs.writeFile(indexFile, JSON.stringify(index), {
+			encoding : 'utf8'
+		}, function(err) {
+			if (err) {
 				reject(err);
-			}
-			else {
+			} else {
 				resolve(metadata);
 			}
 		});
 	});
-	
+
 	return promise;
 }
 
 function generateId() {
 	var date = new Date();
-	return date.getTime().toString();;
+	return date.getTime().toString();
+	;
 }
 
 function save(article, upload) {
-	return saveContent(article, upload).then(addMetadata, function(err){
+	return saveContent(article, upload).then(addMetadata, function(err) {
 		console.log(err);
 	}).then(addIndex, function(err) {
 		console.log(err);
@@ -126,7 +112,7 @@ function saveContent(article, upload) {
 	var promise = new Promise(function(resolve, reject) {
 		//if is upload, file is saved directly, but we need get abstract
 		var file = path.join(articlePath, article.file);
-		if(upload) {
+		if (upload) {
 			fs.readFile(file, {
 				encoding : 'utf8'
 			}, function(err, data) {
@@ -138,8 +124,11 @@ function saveContent(article, upload) {
 				}
 			});
 		} else {
-			fs.writeFile(file, article.content, {encoding: 'utf8'}, function (err) {
-				if (err) reject(err);
+			fs.writeFile(file, article.content, {
+				encoding : 'utf8'
+			}, function(err) {
+				if (err)
+					reject(err);
 				delete article.content;
 				resolve(article);
 			});
@@ -155,15 +144,17 @@ function addMetadata(metadata) {
 
 function saveMetadata(metadata) {
 	var promise = new Promise(function(resolve, reject) {
-		fs.writeFile(metaFile, JSON.stringify(jsonMeta), {encoding: 'utf8'}, function(err) {
-			if(err) 
+		fs.writeFile(metaFile, JSON.stringify(jsonMeta), {
+			encoding : 'utf8'
+		}, function(err) {
+			if (err)
 				reject(err);
 			else {
 				resolve(metadata);
 			}
 		});
 	});
-	
+
 	return promise;
 }
 
@@ -177,10 +168,11 @@ function deleteArticle(id) {
 
 function deleteContent(id) {
 	var promise = new Promise(function(resolve, reject) {
-		var file = path.join(articlePath, id);
-		fs.unlink(file, function (err) {
-		  if (err) reject(err);
-		  resolve(id);
+		var file = path.join(articlePath, index[id].file);
+		fs.unlink(file, function(err) {
+			if (err)
+				reject(err);
+			resolve(id);
 		});
 	});
 	return promise;
@@ -189,9 +181,9 @@ function deleteContent(id) {
 function deleteMetadata(id) {
 	var promise = new Promise(function(resolve, reject) {
 		var len = jsonMeta.length;
-		for(var i = 0; i < len; i++) {
+		for (var i = 0; i < len; i++) {
 			var item = jsonMeta[i];
-			if(item.id == id) {
+			if (item.id == id) {
 				jsonMeta.splice(i, 1);
 				saveMetadata(id).then(resolve);
 				break;
@@ -209,16 +201,18 @@ function deleteIndex(id) {
 
 function getUser(userId) {
 	return new Promise(function(resolve, reject) {
-		fs.readFile(pwdFile, {encoding: 'utf8'}, function(err,data) {
-			if(err) 
+		fs.readFile(pwdFile, {
+			encoding : 'utf8'
+		}, function(err, data) {
+			if (err)
 				reject(err);
 			else {
 				//id:password:displayName
 				var line = data.split(':');
 				var user = {
-					id: line[0],
-					password: line[1],
-					displayName: line[2]
+					id : line[0],
+					password : line[1],
+					displayName : line[2]
 				};
 				resolve(user);
 			}
@@ -228,8 +222,10 @@ function getUser(userId) {
 
 function saveSalt(salt) {
 	return new Promise(function(resolve, reject) {
-		fs.writeFile(saltFile, salt, {encoding: 'utf8'}, function(err) {
-			if(err)
+		fs.writeFile(saltFile, salt, {
+			encoding : 'utf8'
+		}, function(err) {
+			if (err)
 				reject(err);
 			else
 				resolve(salt);
@@ -239,8 +235,10 @@ function saveSalt(salt) {
 
 function getSalt() {
 	return new Promise(function(resolve, reject) {
-		fs.readFile(saltFile, {encoding: 'utf8'}, function(err, data) {
-			if(err)
+		fs.readFile(saltFile, {
+			encoding : 'utf8'
+		}, function(err, data) {
+			if (err)
 				reject(err);
 			else
 				resolve(data);
@@ -262,18 +260,20 @@ function encrypt(password, salt) {
 
 function verifyPassword(user, password) {
 	return getSalt().then(function(salt) {
-			var inputPassword = encrypt(password, salt);
-			return user.password == inputPassword;
-		});
+		var inputPassword = encrypt(password, salt);
+		return user.password == inputPassword;
+	});
 }
 
 function savePassword(userId, password) {
 	return new Promise(function(resolve, reject) {
 		var salt = generateSalt();
 		var encryptedPassword = encrypt(password, salt);
-		var content = userId + ":"+encryptedPassword+":"+userId;
-		fs.writeFile(pwdFile, content, {encoding: 'utf8'}, function(err) {
-			if(err)
+		var content = userId + ":" + encryptedPassword + ":" + userId;
+		fs.writeFile(pwdFile, content, {
+			encoding : 'utf8'
+		}, function(err) {
+			if (err)
 				reject(err);
 			else {
 				saveSalt(salt).then(function(salt) {

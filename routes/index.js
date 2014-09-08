@@ -6,7 +6,7 @@ var md = markdown.markdown;
 
 /* GET home page. */
 router.get('/', function(req, res) {
-	res.render('index', { user: req.user });
+	res.render('index', { user: req.user, page: 'article' });
 	
 });
 

@@ -28,13 +28,15 @@ define(["jquery", "views/articles", "views/CreateArticle", "collections/articles
 				var articleTextarea = $('#article-textarea');
 				var self = this;
 				$("#newArticleButton").click(function() {
-					var createArticleView = new CreateArticleView();
-					createArticleView.onSave = function(a) {
-						self.collectionMap['all'].add(a);
-					};
-					createArticleView.render();
-					$('section').append(createArticleView.el);
-					createArticleView.show();
+					if(!self.createArticleView) {
+						self.createArticleView = new CreateArticleView();
+						self.createArticleView.onSave = function(a) {
+							self.collectionMap['all'].add(a);
+						};
+						self.createArticleView.render();
+						$('section').append(self.createArticleView.el);
+					}
+					self.createArticleView.show();
 					$('html, body, .container').animate({
 						scrollTop : $(document).height()
 					}, 300);

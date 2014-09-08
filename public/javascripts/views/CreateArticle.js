@@ -45,8 +45,16 @@ define(['jquery', 'underscore', 'backbone', 'text!views/templates/CreateArticle.
 				publish('progress/show', [$.t('saving'), 'label-error', 0]);
 			});
 		},
+		
+		reset: function() {
+			$('#inputTitle').val("");
+			$('#inputTag').val("");
+			$('#inputContent').val("");
+			$('#articleTextarea').val("");
+		},
 
 		show : function() {
+			this.reset();
 			$('#createArticleForm').removeClass('hide');
 			$('#articleTextarea').summernote({
 				height : 200

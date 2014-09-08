@@ -11,19 +11,16 @@ router.get('/:id', function(req, res) {
 			encoding : 'utf8'
 		}, function(err, data) {
 			if (err) {
-				return;
-			}
-			var html = md.toHTML(data);
-			util.loadIndex().then(function(index) {
-				var meta = index[req.params.id];
-				res.render('article', {
-					article : {
-						title : meta.title,
-						content : html
-					}
+				res.render('error', {
+					message : err
 				});
-			}, function(err) {
-				console.log(err);
+			}
+			var html = meta.markdown ? md.toHTML(data) : data;
+			res.render('article', {
+				article : {
+					title : meta.title,
+					content : html
+				}
 			});
 		});
 	});
@@ -51,6 +48,7 @@ router.post('/', function(req, res) {
 	if (upload) {
 		data.file = req.files.file.name;
 		data.id = data.file.split('.')[0];
+		data.markdown = true;
 	} else {
 		data.id = data.file = util.generateId();
 		data.abstract = util.getAbstract(data.content);
@@ -69,6 +67,10 @@ router.delete('/:id', function(req, res) {
 	util.deleteArticle(req.params.id).then(function(ret) {
 		res.json({
 			"id" : ret
+		});
+	}, function(err) {
+		res.status(500).json({
+			message : err
 		});
 	});
 });
