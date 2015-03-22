@@ -12,6 +12,7 @@ var flash = require('connect-flash');
 
 var routes = require('./routes/index');
 var resume = require('./routes/resume');
+var how = require('./routes/how');
 var article = require('./routes/article');
 var login = require('./routes/login');
 var profile = require('./routes/profile');
@@ -65,6 +66,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 app.use('/', routes);
 app.use('/profile', profile);
 app.use('/resume', resume);
+app.use('/how', how);
 app.use(util.articleUrl, article);
 
 app.route('/login').get(function(req, res) {

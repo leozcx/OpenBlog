@@ -1,9 +1,9 @@
 {
-  "name": "application-name",
+  "name": "open-blog",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node-debug ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "express": "~4.0.0",
