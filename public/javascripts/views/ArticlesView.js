@@ -1,4 +1,4 @@
-define(['underscore', 'backbone', 'views/article', 'views/confirmDialog'], function(_, Backbone, ArticleView, ConfirmDialog) {
+define(['underscore', 'backbone', 'views/ArticleView', 'views/confirmDialog'], function(_, Backbone, ArticleView, ConfirmDialog) {
 	var ArticlesView = Backbone.View.extend({
 		defaults : {
 			model : null

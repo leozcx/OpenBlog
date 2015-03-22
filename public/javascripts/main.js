@@ -11,7 +11,7 @@ require.config({
 	}
 });
 
-require(["jquery", "article"], function($, ArticlePage) {
+require(["jquery", "ArticlePage"], function($, ArticlePage) {
 	$(function() {
 		i18n.init({
 			resGetPath : 'locales/__lng__/__ns__.json',

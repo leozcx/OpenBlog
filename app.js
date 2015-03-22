@@ -10,7 +10,7 @@ var multer = require('multer');
 var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 
-var routes = require('./routes/index');
+var index = require('./routes/index');
 var resume = require('./routes/resume');
 var how = require('./routes/how');
 var article = require('./routes/article');
@@ -63,7 +63,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 	});
 }));
 
-app.use('/', routes);
+app.use('/', index);
 app.use('/profile', profile);
 app.use('/resume', resume);
 app.use('/how', how);

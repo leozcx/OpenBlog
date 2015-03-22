@@ -1,0 +1,17 @@
+<div>
+	<h2><a href="#"><%= model.get('title')%></a></h2>
+	<p class="lead">
+		by <a href="#">admin</a>
+	</p>
+	<p>
+		<span class="glyphicon glyphicon-time"></span> Posted on <%= createdOn%>
+	</p>
+	<hr>
+	<p>
+		<%= model.get('abstract')%>
+	</p>
+	<a class="btn btn-primary" href="<%= model.get('url')%>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+	<button class="btn btn-link pull-right" id="<%= delButtonId%>"><%= i18n.t('delete')%></button>
+</div>
+
+<hr>

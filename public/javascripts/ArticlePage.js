@@ -1,4 +1,4 @@
-define(["jquery", "views/articles", "views/CreateArticle", "collections/articles", "views/Tag", "pubsub", "i18next", "bootstrap", "summernote"], function($,  ArticlesView, CreateArticleView, ArticleCollection, TagView) {
+define(["jquery", "views/ArticlesView", "views/CreateArticle", "collections/articles", "views/Tag", "pubsub", "i18next", "bootstrap", "summernote"], function($,  ArticlesView, CreateArticleView, ArticleCollection, TagView) {
 
 	var ArticlePage = function() {
 		return {
@@ -34,7 +34,7 @@ define(["jquery", "views/articles", "views/CreateArticle", "collections/articles
 							self.collectionMap['all'].add(a);
 						};
 						self.createArticleView.render();
-						$('section').append(self.createArticleView.el);
+						$('#leftContent').append(self.createArticleView.el);
 					}
 					self.createArticleView.show();
 					$('html, body, .container').animate({
@@ -77,7 +77,7 @@ define(["jquery", "views/articles", "views/CreateArticle", "collections/articles
 					collection : this.collectionMap[tag]
 				});
 				this.articlesView.render();
-				$('section').append(this.articlesView.el);
+				$('#leftContent').append(this.articlesView.el);
 			},
 
 			createTag : function(collection) {

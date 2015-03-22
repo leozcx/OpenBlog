@@ -5,5 +5,17 @@ html
 		link(rel='stylesheet', href='/stylesheets/bootstrap.css', type='text/css', media='all')
 		link(rel='stylesheet', href='/stylesheets/style.css', type='text/css', media='all')
 		block head
-	body.container
-		block content
+	body
+		include header.jade
+		div.container
+			div.row
+				div.col-md-8#leftContent
+					block leftContent
+				div.col-md-4#rightContent
+					div.well
+						h4= "Blog Search"
+						div.input-group
+							input.form-control(type="text")
+							span.input-group-btn
+								button.btn.btn-default(type="button")
+									span.glyphicon.glyphicon-search

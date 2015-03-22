@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'text!views/templates/article.html', 'util'], function($, _, Backbone, template, Util) {
+define(['jquery', 'underscore', 'backbone', 'text!views/templates/ArticleView.html', 'util'], function($, _, Backbone, template, Util) {
 	var ArticleView = Backbone.View.extend({
 
 		initialize : function() {

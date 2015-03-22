@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'article'], function($, _, Backbone) {
+define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 	var TagView = Backbone.View.extend({
 		tagName : "ul",
 		id : "tag",
