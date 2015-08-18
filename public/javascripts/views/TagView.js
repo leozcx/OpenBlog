@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
+define(['jquery', 'underscore', 'backbone', 'text!views/templates/TagView.html',], function($, _, Backbone, template) {
 	var TagView = Backbone.View.extend({
 		tagName : "ul",
 		id : "tag",
@@ -43,19 +43,23 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					});
 				}
 			}, this);
-			for (var tag in tagMap) {
-				var tagHtml = $('<li role="presentation"> <a href="javascript: void(0)"> <span class="badge pull-right">' + tagMap[tag].count + '</span>' + tagMap[tag].label + '</a> </li>');
-				if(tag === "all")
-					tagHtml.addClass('active');
-				(function(tag, tagHtml) {
-					$('a', tagHtml).click(function() {
-						$('li', this.$el).removeClass('active');
-						tagHtml.addClass('active');
-						self.articlePage.createCollection(tagMap[tag].articles, tag);
-					});
-				})(tag, tagHtml);
-				this.$el.append(tagHtml);
-			}
+//			for (var tag in tagMap) {
+//				var tagHtml = $('<li role="presentation"> <a href="javascript: void(0)"> <span class="badge pull-right">' + tagMap[tag].count + '</span>' + tagMap[tag].label + '</a> </li>');
+//				if(tag === "all")
+//					tagHtml.addClass('active');
+//				(function(tag, tagHtml) {
+//					$('a', tagHtml).click(function() {
+//						$('li', this.$el).removeClass('active');
+//						tagHtml.addClass('active');
+//						self.articlePage.createCollection(tagMap[tag].articles, tag);
+//					});
+//				})(tag, tagHtml);
+//				this.$el.append(tagHtml);
+//			}
+			
+			///---
+			var compiledTemplate = _.template(template, this);
+			this.$el.append(compiledTemplate);
 		},
 		
 		refresh: function() {

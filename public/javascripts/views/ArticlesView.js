@@ -20,6 +20,7 @@ define(['underscore', 'backbone', 'views/ArticleView', 'views/confirmDialog'], f
 		
 		createArticleView: function(article) {
 			var self = this;
+			console.debug("this")
 			var template = new ArticleView({
 				model : article
 			});
@@ -37,6 +38,7 @@ define(['underscore', 'backbone', 'views/ArticleView', 'views/confirmDialog'], f
 		},
 
 		render : function() {
+			console.log("render")
 			var self = this;
 			this.confirmDialog = new ConfirmDialog({
 				id : "deleteArticleConfirmDialog"

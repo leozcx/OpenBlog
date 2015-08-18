@@ -1,4 +1,4 @@
-define(["jquery", "views/ArticlesView", "views/CreateArticle", "collections/articles", "views/Tag", "pubsub", "i18next", "bootstrap", "summernote"], function($,  ArticlesView, CreateArticleView, ArticleCollection, TagView) {
+define(["jquery", "views/ArticlesView", "views/CreateArticle", "collections/articles", "pubsub", "i18next", "bootstrap", "summernote"], function($,  ArticlesView, CreateArticleView, ArticleCollection) {
 
 	var ArticlePage = function() {
 		return {
@@ -17,7 +17,7 @@ define(["jquery", "views/ArticlesView", "views/CreateArticle", "collections/arti
 					url : "/article"
 				}).done(function(resp) {
 					self.createCollection(resp, 'all');
-					self.createTag(self.collectionMap['all']);
+//					self.createTag(self.collectionMap['all']);
 				}).fail(function(error) {
 					publish('progress/show', [error, 'label-error', 0]);
 				});
@@ -86,7 +86,7 @@ define(["jquery", "views/ArticlesView", "views/CreateArticle", "collections/arti
 				});
 				this.tagView.articlePage = this;
 				this.tagView.render();
-				$('section').prepend(this.tagView.el);
+				$('#rightContent').append(this.tagView.el);
 			}
 		};
 	};

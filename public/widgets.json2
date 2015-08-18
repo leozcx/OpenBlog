@@ -1,0 +1,28 @@
+[
+	{
+		"category": "basic",
+		"items": [
+			{
+				"name": "Button",
+				"generator": "button"
+			},
+			{
+				"name": "Input",
+				"generator": "button"
+			}
+		]
+	},
+	{
+		"category": "dialog",
+		"items": [
+			{
+				"name": "dialog1",
+				"generator": "button.js"
+			},
+			{
+				"name": "dialog2",
+				"generator": "button.js"
+			}
+		]
+	}
+]
